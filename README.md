@@ -1,29 +1,21 @@
 # frogcrew
 
-This template should help get you started developing with Vue 3 in Vite.
+- [ ] Use Case 1: Crew Member Creates Crew Member Profile 
+	- Front End - Survey Form (details are in the use cases document)
+	- Back End - Making a CrewMember class and (CREATE)
+- [ ] Use Case 3: Crew Member Views A Crew Member’s Profile
+	- Front End - Shows a profile with details on it
 
-## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### TODO
+Sameep:
 
-## Customize configuration
+ - [ ] Start working on CrewMember CRD operations
+ - [ ] Think about how invites might work
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+An:
 
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+- [ ] Crew Member Creates Crew Member Profile  
+- [ ] Crew Member Views A Crew Member’s Profile
+- [ ] Crew Member Views Crew List
+- [ ] Admin views crew members
