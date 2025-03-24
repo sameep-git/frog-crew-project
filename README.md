@@ -10,7 +10,7 @@
 ### TODO
 Sameep:
 
- - [ ] Start working on CrewMember CRD operations
+ - [X] Start working on CrewMember CRD operations
  - [ ] Think about how invites might work
 
 An:
