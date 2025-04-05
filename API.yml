@@ -1,0 +1,313 @@
+openapi: '3.1.1'
+info:
+  title: FrogCrew API
+  version: '1.0'
+servers:
+  - url: https://localhost:8080/frogcrew/api/v1
+tags:
+  - name: crew
+    description: Everything about crew members
+  - name: game
+    description: Everything about a game schedule
+paths:
+  /crew:
+    get:
+      tags:
+        - crew
+      summary: Find all crew members.
+      description: Find all crew members.
+      operationId: getAllCrew
+      responses:
+        '200':
+          description: Find All Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiFindAllResponse"
+    post:
+      tags:
+        - crew
+      summary: Add new a crew member.
+      description: Add new a crew member.
+      operationId: postCrew
+      requestBody:
+        description: Add new a crew member.
+        content:
+          application/json:
+            schema: 
+              $ref: "#/components/schemas/CrewMember"
+      responses:
+        '200':
+          description: Save Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiSaveCrewResponse"
+        '400':
+          description: Invalid input
+  /crew/{crewId}:
+    get:
+      tags:
+        - crew
+      summary: Find a crew member by crewId
+      description: Find a crew member by crewId
+      operationId: findCrewById
+      parameters:
+        - name: "crewId"
+          in: path
+          description: Crew Member ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Find One Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CrewMemberExample"
+        '404':
+          description: Crew member not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseCrewNotFound"
+    delete:
+      tags:
+        - crew
+      summary: Delete a crew member by crewId
+      description: Delete a crew member by crewId
+      operationId: deleteCrewById
+      parameters:
+      - name: "crewId"
+        in: path
+        description: Crew Member ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Delete One Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseDelete'
+        '404':
+          description: Crew member not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseCrewNotFound"
+
+components:
+  schemas:
+    CrewMember:
+      required:
+        - firstName
+        - lastName
+        - email
+        - phone
+        - password
+        - role
+        - qualified
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: john.doe@gmail.com
+        phone:
+          type: string
+          example: 123-456-7890
+        password:
+          type: string
+          example: $2a$10$HVb2HN2NbM/4.bc7yR4qr.V8v1.X/zNAOrVeD4u5rDMsQYiC0wbIq
+        role:
+          type: string
+          example: Student
+        qualified:
+          type: string
+          example: Producer
+
+    CrewMemberExample:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 123874
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: john.doe@gmail.com
+        phone:
+          type: string
+          example: 123-456-7890
+        password:
+          type: string
+          example: $2a$10$HVb2HN2NbM/4.bc7yR4qr.V8v1.X/zNAOrVeD4u5rDMsQYiC0wbIq
+        role:
+          type: string
+          example: Student
+        qualified:
+          type: string
+          example: Producer
+
+    CrewMemberBadRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: first name is required
+        lastName:
+          type: string
+          example: last name is required
+        email:
+          type: string
+          example: email is required
+        phone:
+          type: string
+          example: 123-456-7890
+        password:
+          type: string
+          example: password is required
+        role:
+          type: string
+          example: role is required
+        qualified:
+          type: string
+          example: qualified positions are required
+
+    CrewMemberList:
+      type: array
+      items:
+        $ref: "#/components/schemas/CrewMemberExample"
+      example:
+        - id: 123874
+          firstName: John
+          lastName: Doe
+          email: john.doe@gmail.com
+          phone: 123-456-7890
+          password: $2a$10$HVb2HN2NbM/4.bc7yR4qr.V8v1.X/zNAOrVeD4u5rDMsQYiC0wbIq
+          role: Student
+          qualified: Producer
+        - id: 139853
+          firstName: Aliya
+          lastName: Suri
+          email: aliya.suri@tcu.edu
+          phone: 888-988-0000
+          password: $2a$10$BdTBpV.czzpQjdE4ZWEMGuVv.TpdQNFkNtehnAMLAlIbnFzN5fJhS
+          role: Student
+          qualified: Audio A1
+
+    ApiSaveCrewResponse:
+      type: object
+      properties:
+        flag:
+          type: boolean
+          description: Success or not
+        code:
+          type: integer
+          description: Return code
+          example: 200
+        message:
+          type: string
+          example: "Save Success"
+        data:
+          $ref: "#/components/schemas/CrewMemberExample"
+        
+    ApiFindAllResponse:
+      type: object
+      properties:
+        flag:
+          type: boolean
+          description: Success or not
+        code:
+          type: integer
+          description: Return code
+          example: 200
+        message:
+          type: string
+          example: Find All Success
+        data:
+          $ref: "#/components/schemas/CrewMemberList"
+
+    ApiResponseCrewNotFound:
+      title: API response for not found error
+      description: The schema for bad request error
+      type: object
+      properties:
+        flag:
+          title: flag
+          description: Success or not
+          type: boolean
+          example: false
+          readOnly: true
+        code:
+          title: Http status code
+          description: Http status code
+          type: integer
+          example: 404
+          readOnly: true
+        message:
+          title: Message
+          description: The long error message
+          type: string
+          example: Could not find crew member with Id 132487 :(
+          readOnly: true
+        data:
+          type: object
+          example: null
+
+    ApiResponseDelete:
+      title: API response for delete
+      type: object
+      properties:
+        flag:
+          type: boolean
+          description: Success or not
+        code:
+          type: integer
+          description: Return code
+          example: 200
+        message:
+          type: string
+          example: Delete Success
+        data:
+          type: object
+          example: null
+
+    ApiResponseCrewBadRequest:
+      title: API response for bad request error
+      description: The schema for bad request error
+      type: object
+      properties:
+        flag:
+          title: flag
+          description: Success or not
+          type: boolean
+          example: false
+          readOnly: true
+        code:
+          title: Http status code
+          description: Http status code
+          type: integer
+          example: 400
+          readOnly: true
+        message:
+          title: Message
+          description: The long error message
+          type: string
+          example: Provided arguments are invalid, see data for details.
+          readOnly: true
+        data:
+          $ref: "#/components/schemas/CrewMemberBadRequest"

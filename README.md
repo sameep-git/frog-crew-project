@@ -12,6 +12,7 @@ Sameep:
 
  - [ ] Start working on CrewMember CRD operations
  - [ ] Think about how invites might work
+ - [ ] Work on API documentation
 
 An:
 
