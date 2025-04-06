@@ -1,4 +1,4 @@
-package edu.tcu.cs.frogcrew.CrewMember;
+package edu.tcu.cs.frogcrew.crewmember;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
