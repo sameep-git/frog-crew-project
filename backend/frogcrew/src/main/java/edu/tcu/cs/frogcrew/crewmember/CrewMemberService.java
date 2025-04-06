@@ -4,6 +4,8 @@ import edu.tcu.cs.frogcrew.crewmember.utils.IdWorker;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class CrewMemberService {
@@ -21,5 +23,14 @@ public class CrewMemberService {
     public CrewMember findById(String crewId) {
         return crewMemberRepository.findById(crewId)
                 .orElseThrow(() -> new CrewMemberNotFoundException(crewId));
+    }
+
+    public List<CrewMember> findAll() {
+        return crewMemberRepository.findAll();
+    }
+
+    public CrewMember save(CrewMember crewMember) {
+        crewMember.setId(idWorker.nextId() + "");
+        return this.crewMemberRepository.save(crewMember);
     }
 }

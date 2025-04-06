@@ -1,5 +1,6 @@
 package edu.tcu.cs.frogcrew.crewmember;
 
+import edu.tcu.cs.frogcrew.crewmember.utils.IdWorker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,9 @@ public class CrewMemberServiceTest {
 
     @Mock
     CrewMemberRepository crewMemberRepository;
+
+    @Mock
+    IdWorker idWorker;
 
     @InjectMocks
     CrewMemberService crewMemberService;
@@ -106,6 +110,39 @@ public class CrewMemberServiceTest {
 
     @Test
     void testFindAllSuccess() {
+        // Given
+        given(crewMemberRepository.findAll()).willReturn(this.crewMembers);
 
+        // When
+        List<CrewMember> actualCrew = crewMemberService.findAll();
+
+        // Then
+        assertThat(actualCrew.size()).isEqualTo(this.crewMembers.size());
+        verify(crewMemberRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testSaveSuccess() {
+        // Given
+        CrewMember c = new CrewMember();
+        c.setFirstName("John");
+        c.setLastName("Doe");
+        c.setEmail("john.doe@example.com");
+        c.setPassword("temp");
+        c.setRole("Student");
+        c.setQualifiedPosition("Producer");
+
+        given(idWorker.nextId()).willReturn(12345678L);
+        given(crewMemberRepository.save(c)).willReturn(c);
+
+        // When
+        CrewMember savedCrewMember = crewMemberService.save(c);
+
+        // Then
+        assertThat(savedCrewMember.getId()).isEqualTo("12345678");
+        assertThat(savedCrewMember.getFirstName()).isEqualTo(c.getFirstName());
+        assertThat(savedCrewMember.getLastName()).isEqualTo(c.getLastName());
+        assertThat(savedCrewMember.getEmail()).isEqualTo(c.getEmail());
+        verify(crewMemberRepository, times(1)).save(c);
     }
 }
