@@ -15,9 +15,9 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CrewMemberServiceTest {
@@ -65,7 +65,7 @@ public class CrewMemberServiceTest {
     }
 
     @Test
-    void testFindByIdSuccess() {
+    void testFindCrewMemberByIdSuccess() {
 
         // Given
         CrewMember c = new CrewMember();
@@ -92,7 +92,7 @@ public class CrewMemberServiceTest {
     }
 
     @Test
-    void testFindByIdNotFound() {
+    void testFindCrewMemberByIdNotFound() {
         // Given
         given(crewMemberRepository.findById("1250808601744904192")).willReturn(Optional.empty());
 
@@ -109,7 +109,7 @@ public class CrewMemberServiceTest {
     }
 
     @Test
-    void testFindAllSuccess() {
+    void testFindAllCrewMemberSuccess() {
         // Given
         given(crewMemberRepository.findAll()).willReturn(this.crewMembers);
 
@@ -122,7 +122,7 @@ public class CrewMemberServiceTest {
     }
 
     @Test
-    void testSaveSuccess() {
+    void testSaveCrewMemberSuccess() {
         // Given
         CrewMember c = new CrewMember();
         c.setFirstName("John");
@@ -144,5 +144,40 @@ public class CrewMemberServiceTest {
         assertThat(savedCrewMember.getLastName()).isEqualTo(c.getLastName());
         assertThat(savedCrewMember.getEmail()).isEqualTo(c.getEmail());
         verify(crewMemberRepository, times(1)).save(c);
+    }
+
+    @Test
+    void testDeleteCrewMemberSuccess() {
+        // Given
+        CrewMember c = new CrewMember();
+        c.setFirstName("John");
+        c.setLastName("Doe");
+        c.setEmail("john.doe@example.com");
+        c.setPassword("temp");
+        c.setRole("Student");
+        c.setQualifiedPosition("Producer");
+
+        given(crewMemberRepository.findById("12345678")).willReturn(Optional.of(c));
+        doNothing().when(crewMemberRepository).deleteById("12345678");
+
+        // When
+        crewMemberService.delete("12345678");
+
+        // Then
+        verify(crewMemberRepository, times(1)).deleteById("12345678");
+    }
+
+    @Test
+    void testDeleteCrewMemberNotFound() {
+        // Given
+        given(crewMemberRepository.findById("12345678")).willReturn(Optional.empty());
+
+        // When
+        assertThrows(CrewMemberNotFoundException.class, () -> {
+            crewMemberService.delete("12345678");
+        });
+
+        // Then
+        verify(crewMemberRepository, times(1)).findById("12345678");
     }
 }

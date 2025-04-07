@@ -33,4 +33,10 @@ public class CrewMemberService {
         crewMember.setId(idWorker.nextId() + "");
         return this.crewMemberRepository.save(crewMember);
     }
+
+    public void delete(String crewId) {
+        crewMemberRepository.findById(crewId).orElseThrow(
+                () -> new CrewMemberNotFoundException(crewId));
+        crewMemberRepository.deleteById(crewId);
+    }
 }
