@@ -40,7 +40,6 @@ class CrewMemberControllerTest {
     @BeforeEach
     void setup() {
         crewMembers = new ArrayList<>();
-        crewMembers = new ArrayList<>();
 
         CrewMember c1 = new CrewMember();
         c1.setId("1250808601744904191");
