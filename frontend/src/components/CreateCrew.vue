@@ -1,16 +1,19 @@
 <template>
-    <div class="create-crew">
-      <h2>Create Crew Member</h2>
-      <form @submit.prevent="submit">
-        <input v-model="firstName" placeholder="Enter first name" required />
-        <input v-model="lastName" placeholder="Enter last name" required/>
-        <input v-model="role" placeholder="Enter role" required />
-        <input v-model="email" placeholder="Enter email" required>
-        <input v-model="phoneNumber" placeholder="Enter phone number (999-999-9999)" pattern="\d{10}" required/>
-        <input v-model="password" type = "password" placeholder="Enter password" required/>
-        <button type="submit">Add Crew Member</button>
-      </form>
-    </div>
+   
+
+      <div class="create-crew">
+        <h2>Create Crew Member</h2>
+        <form @submit.prevent="submit">
+          <input v-model="firstName" placeholder="Enter first name" required />
+          <input v-model="lastName" placeholder="Enter last name" required/>
+          <input v-model="role" placeholder="Enter role" required />
+          <input v-model="email" placeholder="Enter email" required>
+          <input v-model="phoneNumber" placeholder="Enter phone number (999-999-9999)" pattern="\d{10}" required/>
+          <input v-model="password" type = "password" placeholder="Enter password" required/>
+          <button type="submit">Add Crew Member</button>
+        </form>
+      </div>
+    
   </template>
   
   <script setup>
@@ -36,12 +39,21 @@
   </script>
   
   <style scoped>
+  .page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 64px); /* Adjust if your navbar has a different height */
+    margin-top: 64px; /* Same height as your fixed navbar */
+    background-color: #f5f5f5;
+  }
+  
   .create-crew {
     background: #fff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+    max-width: 800px;
     margin: 20px auto;
     text-align: center;
   }
