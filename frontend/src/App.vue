@@ -6,8 +6,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import CreateCrew from './components/CreateCrew.vue';
-import CrewList from './components/CrewList.vue';
+
+// import CreateCrew from './components/CreateCrew.vue';
+// import CrewList from './components/CrewList.vue';
 import NavBar from './components/NavBar.vue';
 
 const crewMembers = ref([]);
