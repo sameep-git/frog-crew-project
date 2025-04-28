@@ -14,8 +14,10 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -48,7 +50,7 @@ class CrewMemberControllerTest {
         c1.setEmail("john.doe@example.com");
         c1.setPassword("temp");
         c1.setRole("Student");
-        c1.setQualifiedPosition("Producer");
+        c1.setQualifiedPosition(List.of("Producer"));
 
         CrewMember c2 = new CrewMember();
         c2.setId("1250808601744904192");
@@ -57,7 +59,7 @@ class CrewMemberControllerTest {
         c2.setEmail("sameep.shah@tcu.edu");
         c2.setPassword("temp");
         c2.setRole("Student");
-        c2.setQualifiedPosition("Director");
+        c2.setQualifiedPosition(List.of("Director"));
 
         crewMembers.add(c1);
         crewMembers.add(c2);
@@ -77,7 +79,7 @@ class CrewMemberControllerTest {
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Find One Success"))
-                .andExpect(jsonPath("$.data.id").value("1250808601744904191"))
+                .andExpect(jsonPath("$.data.userId").value("1250808601744904191"))
                 .andExpect(jsonPath("$.data.role").value("Student"));
     }
 
@@ -105,12 +107,10 @@ class CrewMemberControllerTest {
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Find All Success"))
-                .andExpect(jsonPath("$.data[0].id").value("1250808601744904191"))
-                .andExpect(jsonPath("$.data[0].role").value("Student"))
-                .andExpect(jsonPath("$.data[0].qualifiedPosition").value("Producer"))
-                .andExpect(jsonPath("$.data[1].id").value("1250808601744904192"))
-                .andExpect(jsonPath("$.data[1].role").value("Student"))
-                .andExpect(jsonPath("$.data[1].qualifiedPosition").value("Director"));
+                .andExpect(jsonPath("$.data[0].userId").value("1250808601744904191"))
+                .andExpect(jsonPath("$.data[0].fullName").value("John Doe"))
+                .andExpect(jsonPath("$.data[1].userId").value("1250808601744904192"))
+                .andExpect(jsonPath("$.data[1].fullName").value("Sameep Shah"));
     }
 
     @Test
@@ -123,7 +123,7 @@ class CrewMemberControllerTest {
         c.setEmail("john.doe@example.com");
         c.setPassword("temp");
         c.setRole("Student");
-        c.setQualifiedPosition("Producer");
+        c.setQualifiedPosition(Arrays.asList("Producer", "Director"));
 
         String json = this.objectMapper.writeValueAsString(c);
 
@@ -134,9 +134,10 @@ class CrewMemberControllerTest {
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Add One Success"))
-                .andExpect(jsonPath("$.data.id").value("1250808601744904191"))
+                .andExpect(jsonPath("$.data.userId").value("1250808601744904191"))
                 .andExpect(jsonPath("$.data.role").value("Student"))
-                .andExpect(jsonPath("$.data.qualifiedPosition").value("Producer"))
+                .andExpect(jsonPath("$.data.qualifiedPosition[0]").value("Producer"))
+                .andExpect(jsonPath("$.data.qualifiedPosition[1]").value("Director"))
                 .andExpect(jsonPath("$.data.firstName").value("John"))
                 .andExpect(jsonPath("$.data.lastName").value("Doe"))
                 .andExpect(jsonPath("$.data.email").value("john.doe@example.com"));

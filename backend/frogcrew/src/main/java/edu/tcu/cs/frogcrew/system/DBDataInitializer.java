@@ -6,6 +6,9 @@ import edu.tcu.cs.frogcrew.crewmember.CrewMemberService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 @Component
 public class DBDataInitializer implements CommandLineRunner {
 
@@ -25,7 +28,7 @@ public class DBDataInitializer implements CommandLineRunner {
         c1.setEmail("john.doe@example.com");
         c1.setPassword("temp");
         c1.setRole("Student");
-        c1.setQualifiedPosition("Producer");
+        c1.setQualifiedPosition(Arrays.asList("Producer", "Director"));
 
         CrewMember c2 = new CrewMember();
         c2.setId("1250808601744904192");
@@ -35,7 +38,7 @@ public class DBDataInitializer implements CommandLineRunner {
         c2.setEmail("sameep.shah@tcu.edu");
         c2.setPassword("temp");
         c2.setRole("Student");
-        c2.setQualifiedPosition("Director");
+        c2.setQualifiedPosition(Arrays.asList("Producer", "Director"));
 
         CrewMember c3 = new CrewMember();
         c3.setId("1250808601744904193");
@@ -45,7 +48,7 @@ public class DBDataInitializer implements CommandLineRunner {
         c3.setEmail("an.cao@tcu.edu");
         c3.setPassword("temp");
         c3.setRole("Staff");
-        c3.setQualifiedPosition("Audio A1");
+        c3.setQualifiedPosition(Arrays.asList("Producer", "Director","Audio A1"));
 
         CrewMember c4 = new CrewMember();
         c4.setId("1250808601744904194");
@@ -55,7 +58,7 @@ public class DBDataInitializer implements CommandLineRunner {
         c4.setEmail("a.rubayita@tcu.edu");
         c4.setPassword("temp");
         c4.setRole("Student");
-        c4.setQualifiedPosition("Technical Director");
+        c4.setQualifiedPosition(Arrays.asList("Producer", "Technical Director"));
 
         crewMemberRepository.save(c1);
         crewMemberRepository.save(c2);
