@@ -11,6 +11,9 @@
 
       <button @click="router.push('/create-profile')">Create Profile</button>
       <button @click="router.push('/crew-list')">View Crew List</button>
+      <button @click="router.push('/game-schedule')">Game Schedule</button>
+      <button @click="router.push('/view-game-schedule')">View Game Schedule</button>
+
     </nav>
     
     <router-view />

@@ -5,7 +5,9 @@
 
 
 // createApp(App).mount('#app')
-
+// @tailwind base;
+// @tailwind components;
+// @tailwind utilities;
 import './assets/main.css'
 
 import { createApp } from 'vue'
