@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +45,7 @@ public class CrewMemberServiceTest {
         c1.setEmail("john.doe@example.com");
         c1.setPassword("temp");
         c1.setRole("Student");
-        c1.setQualifiedPosition("Producer");
+        c1.setQualifiedPosition(List.of("Producer"));
 
         CrewMember c2 = new CrewMember();
         c2.setId("1250808601744904192");
@@ -53,7 +54,7 @@ public class CrewMemberServiceTest {
         c2.setEmail("sameep.shah@tcu.edu");
         c2.setPassword("temp");
         c2.setRole("Student");
-        c2.setQualifiedPosition("Director");
+        c2.setQualifiedPosition(Arrays.asList("Producer", "Director"));
 
         crewMembers.add(c1);
         crewMembers.add(c2);
@@ -75,7 +76,7 @@ public class CrewMemberServiceTest {
         c.setEmail("john.doe@example.com");
         c.setPassword("temp");
         c.setRole("Student");
-        c.setQualifiedPosition("Producer");
+        c.setQualifiedPosition(Arrays.asList("Producer", "Director"));
 
         given(crewMemberRepository.findById("1250808601744904191")).willReturn(Optional.of(c));
 
@@ -130,7 +131,7 @@ public class CrewMemberServiceTest {
         c.setEmail("john.doe@example.com");
         c.setPassword("temp");
         c.setRole("Student");
-        c.setQualifiedPosition("Producer");
+        c.setQualifiedPosition(Arrays.asList("Producer", "Director"));
 
         given(idWorker.nextId()).willReturn(12345678L);
         given(crewMemberRepository.save(c)).willReturn(c);
@@ -155,7 +156,7 @@ public class CrewMemberServiceTest {
         c.setEmail("john.doe@example.com");
         c.setPassword("temp");
         c.setRole("Student");
-        c.setQualifiedPosition("Producer");
+        c.setQualifiedPosition(Arrays.asList("Producer", "Director"));
 
         given(crewMemberRepository.findById("12345678")).willReturn(Optional.of(c));
         doNothing().when(crewMemberRepository).deleteById("12345678");
