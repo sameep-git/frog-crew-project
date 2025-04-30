@@ -32,6 +32,7 @@ public class AvailabilityController {
         this.availabilityDTOToAvailabilityConverter = availabilityDTOToAvailabilityConverter;
     }
 
+    // Use case 7: Crew Member Submits Availability
     @PostMapping
     public Result addAvailability(@Valid @RequestBody AvailabilityDTO availabilityDTO) {
         CrewMember availableCrewMember = this.crewMemberService.findById(availabilityDTO.crewMemberId());
