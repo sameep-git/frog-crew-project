@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -44,7 +43,7 @@ class CrewMemberControllerTest {
         crewMembers = new ArrayList<>();
 
         CrewMember c1 = new CrewMember();
-        c1.setId("1250808601744904191");
+        c1.setId(1);
         c1.setFirstName("John");
         c1.setLastName("Doe");
         c1.setEmail("john.doe@example.com");
@@ -53,7 +52,7 @@ class CrewMemberControllerTest {
         c1.setQualifiedPosition(List.of("Producer"));
 
         CrewMember c2 = new CrewMember();
-        c2.setId("1250808601744904192");
+        c2.setId(2);
         c2.setFirstName("Sameep");
         c2.setLastName("Shah");
         c2.setEmail("sameep.shah@tcu.edu");
@@ -71,29 +70,29 @@ class CrewMemberControllerTest {
     @Test
     void testFindCrewMemberByIdSuccess() throws Exception {
         // Given
-        given(this.crewMemberService.findById("1250808601744904191"))
+        given(this.crewMemberService.findById(1))
                 .willReturn(this.crewMembers.get(0));
 
         // When and Then
-        this.mockMvc.perform(get("/frogcrew/api/v1/crew/1250808601744904191").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(get("/frogcrew/api/v1/crew/1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Find One Success"))
-                .andExpect(jsonPath("$.data.userId").value("1250808601744904191"))
+                .andExpect(jsonPath("$.data.userId").value(1))
                 .andExpect(jsonPath("$.data.role").value("Student"));
     }
 
     @Test
     void testFindCrewMemberByIdNotFound() throws Exception {
         // Given
-        given(this.crewMemberService.findById("1250808601744904191"))
-                .willThrow(new CrewMemberNotFoundException("1250808601744904191"));
+        given(this.crewMemberService.findById(1))
+                .willThrow(new CrewMemberNotFoundException(1));
 
         // When and Then
-        this.mockMvc.perform(get("/frogcrew/api/v1/crew/1250808601744904191").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(get("/frogcrew/api/v1/crew/1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-                .andExpect(jsonPath("$.message").value("Could not find crew member with Id 1250808601744904191 :("))
+                .andExpect(jsonPath("$.message").value("Could not find crew member with Id 1 :("))
                 .andExpect(jsonPath("$.data").isEmpty());
     }
 
@@ -107,9 +106,9 @@ class CrewMemberControllerTest {
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Find All Success"))
-                .andExpect(jsonPath("$.data[0].userId").value("1250808601744904191"))
+                .andExpect(jsonPath("$.data[0].userId").value(1))
                 .andExpect(jsonPath("$.data[0].fullName").value("John Doe"))
-                .andExpect(jsonPath("$.data[1].userId").value("1250808601744904192"))
+                .andExpect(jsonPath("$.data[1].userId").value(2))
                 .andExpect(jsonPath("$.data[1].fullName").value("Sameep Shah"));
     }
 
@@ -117,7 +116,7 @@ class CrewMemberControllerTest {
     void testAddCrewMemberSuccess() throws Exception {
         // Given
         CrewMember c = new CrewMember();
-        c.setId("1250808601744904191");
+        c.setId(1);
         c.setFirstName("John");
         c.setLastName("Doe");
         c.setEmail("john.doe@example.com");
@@ -134,7 +133,7 @@ class CrewMemberControllerTest {
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Add One Success"))
-                .andExpect(jsonPath("$.data.userId").value("1250808601744904191"))
+                .andExpect(jsonPath("$.data.userId").value(1))
                 .andExpect(jsonPath("$.data.role").value("Student"))
                 .andExpect(jsonPath("$.data.qualifiedPosition[0]").value("Producer"))
                 .andExpect(jsonPath("$.data.qualifiedPosition[1]").value("Director"))
@@ -146,10 +145,10 @@ class CrewMemberControllerTest {
     @Test
     void testDeleteCrewMemberSuccess() throws Exception {
         // Given
-        doNothing().when(this.crewMemberService).delete("1250808601744904191");
+        doNothing().when(this.crewMemberService).delete(1);
 
         // When and Then
-        this.mockMvc.perform(delete("/frogcrew/api/v1/crew/1250808601744904191").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(delete("/frogcrew/api/v1/crew/1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Delete Success"))
@@ -159,13 +158,13 @@ class CrewMemberControllerTest {
     @Test
     void testDeleteCrewMemberNotFound() throws Exception {
         // Given
-        doThrow(new CrewMemberNotFoundException("1250808601744904191")).when(this.crewMemberService).delete("1250808601744904191");
+        doThrow(new CrewMemberNotFoundException(1)).when(this.crewMemberService).delete(1);
 
         // When and Then
-        this.mockMvc.perform(delete("/frogcrew/api/v1/crew/1250808601744904191").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(delete("/frogcrew/api/v1/crew/1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-                .andExpect(jsonPath("$.message").value("Could not find crew member with Id 1250808601744904191 :("))
+                .andExpect(jsonPath("$.message").value("Could not find crew member with Id 1 :("))
                 .andExpect(jsonPath("$.data").isEmpty());
 
     }
