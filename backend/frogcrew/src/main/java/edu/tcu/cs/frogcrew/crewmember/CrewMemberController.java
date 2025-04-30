@@ -29,7 +29,7 @@ public class CrewMemberController {
 
     // Use Case 3
     @GetMapping("/{crewId}")
-    public Result findCrewMemberById(@PathVariable Integer crewId) {
+    public Result findCrewMemberById(@PathVariable Long crewId) {
         CrewMember foundCrewMember = crewMemberService.findById(crewId);
         CrewMemberDto foundCrewMemberDto = crewMemberToCrewMemberDtoConverter.convert(foundCrewMember);
         return new Result(true, StatusCode.SUCCESS, "Find One Success", foundCrewMemberDto);

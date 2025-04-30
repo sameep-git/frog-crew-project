@@ -54,8 +54,8 @@ class AssignmentControllerTest {
 
         objectMapper.registerModule(new JavaTimeModule());
 
-        dto1 = new CrewAssignmentDto(1, 101, 1, "Camera 1", "Jane Doe", LocalTime.of(15, 0), "Gate A");
-        dto2 = new CrewAssignmentDto(2, 102, 1, "Director", "John Smith", LocalTime.of(14, 30), "Control Room");
+        dto1 = new CrewAssignmentDto(1, 101L, 1, "Camera 1", "Jane Doe", LocalTime.of(15, 0), "Gate A");
+        dto2 = new CrewAssignmentDto(2, 102L, 1, "Director", "John Smith", LocalTime.of(14, 30), "Control Room");
         crewAssignmentDtos = List.of(dto1, dto2);
 
         crewListDto = new CrewListDto(
@@ -114,8 +114,8 @@ class AssignmentControllerTest {
     void testAddCrewScheduleSuccess() throws Exception {
         // Given
         // Input DTOs (without IDs, as they would be for creation)
-        CrewAssignmentDto inputDto1 = new CrewAssignmentDto(null, 101, 1, "Camera 1", null, LocalTime.of(15, 0), "Gate A");
-        CrewAssignmentDto inputDto2 = new CrewAssignmentDto(null, 102, 1, "Director", null, LocalTime.of(14, 30), "Control Room");
+        CrewAssignmentDto inputDto1 = new CrewAssignmentDto(null, 101L, 1, "Camera 1", null, LocalTime.of(15, 0), "Gate A");
+        CrewAssignmentDto inputDto2 = new CrewAssignmentDto(null, 102L, 1, "Director", null, LocalTime.of(14, 30), "Control Room");
         List<CrewAssignmentDto> inputDtos = List.of(inputDto1, inputDto2);
 
 

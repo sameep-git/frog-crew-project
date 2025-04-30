@@ -67,12 +67,12 @@ class AssignmentServiceTest {
         // Add time if Game object has it
 
         crewMember1 = new CrewMember();
-        crewMember1.setId(101);
+        crewMember1.setId(101L);
         crewMember1.setFirstName("Jane");
         crewMember1.setLastName("Doe");
 
         crewMember2 = new CrewMember();
-        crewMember2.setId(102);
+        crewMember2.setId(102L);
         crewMember2.setFirstName("John");
         crewMember2.setLastName("Smith");
 
@@ -95,8 +95,8 @@ class AssignmentServiceTest {
         assignments = List.of(assignment1, assignment2);
 
         // Assume DTOs corresponding to the assignments
-        assignmentDto1 = new CrewAssignmentDto(1, 101, 1, "Camera 1", "Jane Doe", LocalTime.of(15, 0), "Gate A");
-        assignmentDto2 = new CrewAssignmentDto(2, 102, 1, "Director", "John Smith", LocalTime.of(14, 30), "Control Room");
+        assignmentDto1 = new CrewAssignmentDto(1, 101L, 1, "Camera 1", "Jane Doe", LocalTime.of(15, 0), "Gate A");
+        assignmentDto2 = new CrewAssignmentDto(2, 102L, 1, "Director", "John Smith", LocalTime.of(14, 30), "Control Room");
         assignmentDtos = List.of(assignmentDto1, assignmentDto2);
     }
 
@@ -168,8 +168,8 @@ class AssignmentServiceTest {
     void testSaveCrewScheduleSuccess() {
         // Given
         // DTOs for saving (crewedUserId might be null initially)
-        CrewAssignmentDto inputDto1 = new CrewAssignmentDto(null, 101, 1, "Camera 1", null, LocalTime.of(15, 0), "Gate A");
-        CrewAssignmentDto inputDto2 = new CrewAssignmentDto(null, 102, 1, "Director", null, LocalTime.of(14, 30), "Control Room");
+        CrewAssignmentDto inputDto1 = new CrewAssignmentDto(null, 101L, 1, "Camera 1", null, LocalTime.of(15, 0), "Gate A");
+        CrewAssignmentDto inputDto2 = new CrewAssignmentDto(null, 102L, 1, "Director", null, LocalTime.of(14, 30), "Control Room");
         List<CrewAssignmentDto> inputDtos = List.of(inputDto1, inputDto2);
 
         // Corresponding entities returned by the converter
@@ -221,7 +221,7 @@ class AssignmentServiceTest {
     void testSaveCrewScheduleGameNotFound() {
         // Given
         // DTOs for saving (crewedUserId might be null initially)
-        CrewAssignmentDto inputDto1 = new CrewAssignmentDto(null, 101, 99, "Camera 1", null, LocalTime.of(15, 0), "Gate A");
+        CrewAssignmentDto inputDto1 = new CrewAssignmentDto(null, 101L, 99, "Camera 1", null, LocalTime.of(15, 0), "Gate A");
         List<CrewAssignmentDto> inputDtos = List.of(inputDto1);
 
         given(gameRepository.findById(99)).willReturn(Optional.empty());
