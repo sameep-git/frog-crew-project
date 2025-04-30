@@ -20,7 +20,7 @@ public class CrewMemberService {
         this.idWorker = idWorker;
     }
 
-    public CrewMember findById(Integer crewId) {
+    public CrewMember findById(Long crewId) {
         return crewMemberRepository.findById(String.valueOf(crewId))
                 .orElseThrow(() -> new CrewMemberNotFoundException(crewId));
     }
@@ -30,7 +30,7 @@ public class CrewMemberService {
     }
 
     public CrewMember save(CrewMember crewMember) {
-        crewMember.setId(Integer.valueOf(idWorker.nextId() + ""));
+        crewMember.setId(Long.valueOf(idWorker.nextId() + ""));
         return this.crewMemberRepository.save(crewMember);
     }
 
