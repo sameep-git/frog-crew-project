@@ -5,9 +5,12 @@ import CreateCrew from '../components/CreateCrew.vue';
 import CrewList from '../components/CrewList.vue';
 import GameSchedule from '@/components/GameSchedule.vue';
 import ViewGameSchedule from '../components/ViewGameSchedule.vue';
+import LogIn from '../components/LogIn.vue';
+
 
 const routes = [
   { path: '/', component: HomePage },
+  { path: '/login', name: 'Login', component: LogIn },
   { path: '/create-profile', name: "CreateCrew", component: CreateCrew },
   { path: '/crew-list', component: CrewList },
   { path: '/view-game-schedule', component: ViewGameSchedule },

@@ -1,7 +1,6 @@
 <template>
   <NavBar />
-  <!-- <CreateCrew @addCrewMember="addCrewMember" />
-  <CrewList :crewMembers="crewMembers" /> -->
+ 
 </template>
 
 <script setup>
@@ -16,13 +15,4 @@ const addCrewMember = (member) => {
 };
 </script> 
 
-<!-- 
-<template>
-  <NavBar />
-  <router-view />
-</template>
 
-<script setup>
-import NavBar from './components/NavBar.vue';
-</script>
- -->
