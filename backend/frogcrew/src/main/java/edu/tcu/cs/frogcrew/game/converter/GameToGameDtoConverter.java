@@ -16,7 +16,7 @@ public class GameToGameDtoConverter implements Converter<Game, GameDto> {
                 game.getTime(),
                 game.getVenue(),
                 game.getOpponent(),
-                game.getCrewPositions(),
+                game.getCrewPositions().toString(),
                 game.isFinalized(),
                 game.isPublished()
         );

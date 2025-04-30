@@ -23,6 +23,7 @@ public class GameScheduleController {
         this.gameScheduleDtoToGameScheduleConverter = gameScheduleDtoToGameScheduleConverter;
     }
 
+    // Use case 18: Admin creates Game Schedule
     @PostMapping
     public Result addGameSchedule(@Valid @RequestBody GameScheduleDto gameScheduleDto) {
         GameSchedule gameSchedule = this.gameScheduleDtoToGameScheduleConverter.convert(gameScheduleDto);
