@@ -1,7 +1,7 @@
 package edu.tcu.cs.frogcrew.crewmember.dto;
 
 public record CrewMemberSimpleDto(
-        Integer userId,
+        Long userId,
         String fullName,
         String email,
         String phoneNumber

@@ -1,4 +1,3 @@
-
 import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../components/HomePage.vue';
 import CreateCrew from '../components/CreateCrew.vue';
@@ -11,7 +10,7 @@ import LogIn from '../components/LogIn.vue';
 const routes = [
   { path: '/', component: HomePage },
   { path: '/login', name: 'Login', component: LogIn },
-  { path: '/create-profile', name: "CreateCrew", component: CreateCrew },
+  { path: '/create-crew', name: "CreateCrew", component: CreateCrew },
   { path: '/crew-list', component: CrewList },
   { path: '/view-game-schedule', component: ViewGameSchedule },
   { path: '/game-schedule', component: GameSchedule},

@@ -43,7 +43,7 @@ class CrewMemberControllerTest {
         crewMembers = new ArrayList<>();
 
         CrewMember c1 = new CrewMember();
-        c1.setId(1);
+        c1.setId(1L);
         c1.setFirstName("John");
         c1.setLastName("Doe");
         c1.setEmail("john.doe@example.com");
@@ -52,7 +52,7 @@ class CrewMemberControllerTest {
         c1.setQualifiedPosition(List.of("Producer"));
 
         CrewMember c2 = new CrewMember();
-        c2.setId(2);
+        c2.setId(2L);
         c2.setFirstName("Sameep");
         c2.setLastName("Shah");
         c2.setEmail("sameep.shah@tcu.edu");
@@ -70,7 +70,7 @@ class CrewMemberControllerTest {
     @Test
     void testFindCrewMemberByIdSuccess() throws Exception {
         // Given
-        given(this.crewMemberService.findById(1))
+        given(this.crewMemberService.findById(1L))
                 .willReturn(this.crewMembers.get(0));
 
         // When and Then
@@ -85,7 +85,7 @@ class CrewMemberControllerTest {
     @Test
     void testFindCrewMemberByIdNotFound() throws Exception {
         // Given
-        given(this.crewMemberService.findById(1))
+        given(this.crewMemberService.findById(1L))
                 .willThrow(new CrewMemberNotFoundException(1));
 
         // When and Then
@@ -116,7 +116,7 @@ class CrewMemberControllerTest {
     void testAddCrewMemberSuccess() throws Exception {
         // Given
         CrewMember c = new CrewMember();
-        c.setId(1);
+        c.setId(1L);
         c.setFirstName("John");
         c.setLastName("Doe");
         c.setEmail("john.doe@example.com");

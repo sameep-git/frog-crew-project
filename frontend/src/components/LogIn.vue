@@ -25,9 +25,27 @@ const email = ref('')
 const password = ref('')
 const router = useRouter()
 
-// Temporary mock login
+// Temporary mock login using localStorage
 async function login(email, password) {
-  if (email === 'admin@example.com' && password === 'admin') {
+  const storedUsers = localStorage.getItem('users')
+  if (!storedUsers) {
+    return Promise.reject('No users found')
+  }
+
+  const users = JSON.parse(storedUsers)
+  const user = users.find(u => u.email === email && u.password === password)
+  
+  if (user) {
+    // Store authentication state and current user info
+    localStorage.setItem('isAuthenticated', 'true')
+    localStorage.setItem('userRole', user.role)
+    localStorage.setItem('currentUser', JSON.stringify({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: user.role,
+      qualifiedPosition: user.qualifiedPosition
+    }))
     return Promise.resolve()
   } else {
     return Promise.reject('Invalid credentials')
@@ -35,13 +53,12 @@ async function login(email, password) {
 }
 
 function getUserRole() {
-  return 'ADMIN' // mock role for now
+  return localStorage.getItem('userRole') || 'USER'
 }
 
 async function handleLogin() {
   try {
     await login(email.value, password.value)
-
     const userRole = getUserRole()
 
     // Example: Add dynamic routes if needed

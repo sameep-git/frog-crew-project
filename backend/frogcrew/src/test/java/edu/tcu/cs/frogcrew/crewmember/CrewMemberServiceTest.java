@@ -39,7 +39,7 @@ public class CrewMemberServiceTest {
         crewMembers = new ArrayList<>();
 
         CrewMember c1 = new CrewMember();
-        c1.setId(1);
+        c1.setId(1L);
         c1.setFirstName("John");
         c1.setLastName("Doe");
         c1.setEmail("john.doe@example.com");
@@ -48,7 +48,7 @@ public class CrewMemberServiceTest {
         c1.setQualifiedPosition(List.of("Producer"));
 
         CrewMember c2 = new CrewMember();
-        c2.setId(2);
+        c2.setId(2L);
         c2.setFirstName("Sameep");
         c2.setLastName("Shah");
         c2.setEmail("sameep.shah@tcu.edu");
@@ -70,7 +70,7 @@ public class CrewMemberServiceTest {
 
         // Given
         CrewMember c = new CrewMember();
-        c.setId(1);
+        c.setId(1L);
         c.setFirstName("John");
         c.setLastName("Doe");
         c.setEmail("john.doe@example.com");
@@ -81,7 +81,7 @@ public class CrewMemberServiceTest {
         given(crewMemberRepository.findById(String.valueOf(1))).willReturn(Optional.of(c));
 
         // When
-        CrewMember returnedCrewMember = crewMemberService.findById(1);
+        CrewMember returnedCrewMember = crewMemberService.findById(1L);
 
         // Then
         assertThat(returnedCrewMember.getId()).isEqualTo(c.getId());
@@ -99,7 +99,7 @@ public class CrewMemberServiceTest {
 
         // When
         Throwable thrown = catchThrowable(() -> {
-            CrewMember crewMember = crewMemberService.findById(2);
+            CrewMember crewMember = crewMemberService.findById(2L);
         });
 
         // Then
