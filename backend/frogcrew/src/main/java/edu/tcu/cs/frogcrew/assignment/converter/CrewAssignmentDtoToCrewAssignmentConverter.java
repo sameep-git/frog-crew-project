@@ -26,7 +26,7 @@ public class CrewAssignmentDtoToCrewAssignmentConverter implements Converter<Cre
     public Assignment convert(CrewAssignmentDto source) {
         Assignment assignment = new Assignment();
 
-        CrewMember crewMember = crewMemberRepository.findById(source.userId())
+        CrewMember crewMember = crewMemberRepository.findById(String.valueOf(source.userId()))
                 .orElseThrow(() -> new ObjectNotFoundException("CrewMember", String.valueOf(source.userId())));
 
         Game game = gameRepository.findById(Math.toIntExact(source.gameId()))
