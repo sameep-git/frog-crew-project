@@ -35,21 +35,42 @@ async function login(email, password) {
   const users = JSON.parse(storedUsers)
   const user = users.find(u => u.email === email && u.password === password)
   
+  // if (user) {
+  //   // Store authentication state and current user info
+  //   localStorage.setItem('isAuthenticated', 'true')
+  //   localStorage.setItem('userRole', user.role)
+  //   localStorage.setItem('currentUser', JSON.stringify({
+  //     firstName: user.firstName,
+  //     lastName: user.lastName,
+  //     email: user.email,
+  //     role: user.role,
+  //     qualifiedPosition: user.qualifiedPosition
+  //   }))
+  //   return Promise.resolve()
+  // } else {
+  //   return Promise.reject('Invalid credentials')
+  // }
+
   if (user) {
-    // Store authentication state and current user info
-    localStorage.setItem('isAuthenticated', 'true')
-    localStorage.setItem('userRole', user.role)
-    localStorage.setItem('currentUser', JSON.stringify({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      role: user.role,
-      qualifiedPosition: user.qualifiedPosition
-    }))
-    return Promise.resolve()
-  } else {
+  localStorage.setItem('isAuthenticated', 'true')
+  localStorage.setItem('userRole', user.role)
+  localStorage.setItem('currentUser', JSON.stringify({
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    role: user.role,
+    qualifiedPosition: user.qualifiedPosition
+  }))
+
+  // ✅ Add this line:
+  localStorage.setItem('token', 'mock-admin-token')
+
+  return Promise.resolve()
+} else {
     return Promise.reject('Invalid credentials')
   }
+
+
 }
 
 function getUserRole() {

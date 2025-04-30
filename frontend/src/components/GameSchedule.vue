@@ -1,235 +1,533 @@
-<!-- 
-
-<template>
+<!-- <template>
   <div class="container">
-    <h1 class="title">Game Schedule</h1>
+    <h1 class="title">Game Schedule Management</h1>
 
-    <div class="controls">
-      <input v-model="searchTerm" class="form-input" placeholder="Search games...">
-      <select v-model="sortOption" class="form-input">
-        <option value="">Sort by</option>
-        <option value="date">Date</option>
-        <option value="team">Team</option>
-        <option value="opponent">Opponent</option>
-        <option value="time">Time</option>
-      </select>
-    </div>
-
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr class="header-row">
-            <th>Date</th>
-            <th>Team</th>
-            <th>Opponent</th>
-            <th>Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(game, index) in filteredAndSortedGames" :key="index">
-            <td>{{ game.date }}</td>
-            <td>{{ game.team }}</td>
-            <td>{{ game.opponent }}</td>
-            <td>{{ game.time }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div v-if="error" class="error-message">
+      {{ error }}
     </div>
 
     <div class="form-section">
-      <h2 class="form-title">Add New Game</h2>
-      <form @submit.prevent="addGame" class="form-grid">
-        <input v-model="newGame.date" placeholder="Date (e.g., August 30, 2025)" class="form-input" required />
-        <select v-model="newGame.team" class="form-input" required>
-          <option disabled value="">Select Team</option>
-          <option>Football</option>
-          <option>Basketball</option>
-          <option>Volleyball</option>
-        </select>
-        <input v-model="newGame.opponent" placeholder="Opponent (e.g., Nevada)" class="form-input" required />
-        <input v-model="newGame.time" placeholder="Time (e.g., 3:00 PM)" class="form-input" required />
-        <button type="submit" class="submit-button">Add Game</button>
+      <h2 class="form-title">Create New Game Schedule</h2>
+      <form @submit.prevent="createGameSchedule" class="form-grid">
+        <div class="form-group">
+          <label for="sport">Sport Type</label>
+          <select v-model="newSchedule.sport" id="sport" class="form-input" required>
+            <option value="">Select Sport</option>
+            <option value="Football">Football</option>
+            <option value="Basketball">Basketball</option>
+            <option value="Volleyball">Volleyball</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="season">Season</label>
+          <input 
+            v-model="newSchedule.season" 
+            id="season" 
+            class="form-input" 
+            placeholder="e.g., 2024-2025" 
+            required 
+          />
+        </div>
+
+        <button type="submit" class="submit-button" :disabled="loading">
+          {{ loading ? 'Creating...' : 'Create Schedule' }}
+        </button>
       </form>
+    </div>
+
+    <div v-if="schedules.length > 0" class="schedules-section">
+      <h2 class="section-title">Existing Schedules</h2>
+      <div class="schedules-grid">
+        <div v-for="schedule in schedules" :key="schedule.id" class="schedule-card">
+          <h3>{{ schedule.sport }}</h3>
+          <p>Season: {{ schedule.season }}</p>
+          <p>Status: {{ schedule.isPublished ? 'Published' : 'Draft' }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, ref, computed } from 'vue';
+import { ref, reactive, computed, onMounted } from 'vue';
 
-const games = ref([]);
-const newGame = reactive({ date: '', team: '', opponent: '', time: '' });
-const searchTerm = ref('');
-const sortOption = ref('');
+const API_BASE_URL = 'http://localhost:8080/frogcrew/api/v1/gameSchedule';
 
-const addGame = () => {
-  if (newGame.date && newGame.team && newGame.opponent && newGame.time) {
-    games.value.push({ ...newGame });
-    newGame.date = '';
-    newGame.team = '';
-    newGame.opponent = '';
-    newGame.time = '';
+const newSchedule = reactive({
+  sport: '',
+  season: ''
+});
+
+const schedules = ref([]);
+const loading = ref(false);
+const error = ref(null);
+
+const createGameSchedule = async () => {
+  if (!isAdmin.value) {
+    error.value = "You don't have permission to create game schedules";
+    return;
+  }
+
+  loading.value = true;
+  error.value = null;
+
+  try {
+    const response = await fetch(API_BASE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify(newSchedule)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || 'Failed to create game schedule');
+    }
+
+    if (result.success) {
+      // Reset form
+      newSchedule.sport = '';
+      newSchedule.season = '';
+      
+      // Refresh schedules list
+      await fetchSchedules();
+    } else {
+      throw new Error(result.message || 'Failed to create game schedule');
+    }
+  } catch (err) {
+    error.value = err.message;
+    console.error('Error creating game schedule:', err);
+  } finally {
+    loading.value = false;
   }
 };
 
-const filteredAndSortedGames = computed(() => {
-  let list = games.value.filter(game =>
-    game.date.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-    game.team.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-    game.opponent.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-    game.time.toLowerCase().includes(searchTerm.value.toLowerCase())
-  );
+const fetchSchedules = async () => {
+  try {
+    const response = await fetch(API_BASE_URL, {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
 
-  if (sortOption.value) {
-    list.sort((a, b) => a[sortOption.value].localeCompare(b[sortOption.value]));
+    const result = await response.json();
+
+    if (result.success && Array.isArray(result.data)) {
+      schedules.value = result.data;
+    } else {
+      schedules.value = [];
+    }
+  } catch (err) {
+    console.error('Error fetching schedules:', err);
+    schedules.value = [];
   }
+};
 
-  return list;
+// Check if user is admin
+const isAdmin = computed(() => {
+  return localStorage.getItem('userRole') === 'ADMIN';
+});
+
+// Fetch schedules on component mount
+onMounted(() => {
+  fetchSchedules();
 });
 </script>
 
 <style scoped>
 .container {
   padding: 24px;
-  margin: 100px auto 24px; 
-  max-width: 900px; 
+  margin: 100px auto 24px;
+  max-width: 900px;
 }
+
 .title {
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  color: #1a1a1a;
 }
-.controls {
-  margin-bottom: 16px;
-  display: flex;
-  gap: 16px;
-}
-.table-wrapper {
-  overflow-x: auto;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid #e5e7eb;
-}
-th, td {
-  border: 1px solid #e5e7eb;
-  padding: 12px;
-  text-align: left;
-}
-.header-row {
-  background-color: #2563eb;
-  color: white;
-}
+
 .form-section {
-  margin-top: 32px;
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 32px;
 }
+
 .form-title {
   font-size: 20px;
   font-weight: bold;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  color: #2563eb;
 }
+
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
 }
-.form-input {
-  padding: 8px;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
-  width: 100%;
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
+
+.form-group label {
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.form-input {
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
 .submit-button {
-  grid-column: span 2;
-  background-color: #22c55e;
+  background-color: #2563eb;
   color: white;
-  padding: 8px;
+  padding: 12px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #1d4ed8;
+}
+
+.submit-button:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.schedules-section {
+  margin-top: 32px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #1a1a1a;
+}
+
+.schedules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.schedule-card {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-card h3 {
+  margin: 0 0 8px 0;
+  color: #2563eb;
+}
+
+.schedule-card p {
+  margin: 4px 0;
+  color: #4b5563;
 }
 </style>
-
  -->
 
-
  <template>
-  <div class="game-list">
-    <h2>Game Schedules</h2>
+  <div class="container">
+    <h1 class="title">Game Schedule Management</h1>
 
     <div v-if="error" class="error-message">
-      Error: {{ error }}
-    </div>
-    <div v-if="loading" class="loading-message">
-      Loading game schedules...
+      {{ error }}
     </div>
 
-    <ul v-if="!loading && !error">
-      <li v-for="(game, index) in games" :key="index">
-        <router-link :to="{ name: 'GameSchedule', params: { id: index, gameData: game } }" class="game-link">
-          {{ game.date }} - {{ game.team }} vs {{ game.opponent }}
-        </router-link>
-      </li>
-      <li v-if="games.length === 0">
-        No game schedules found
-      </li>
-    </ul>
+    <div class="form-section">
+      <h2 class="form-title">Create New Game Schedule</h2>
+      <form @submit.prevent="createGameSchedule" class="form-grid">
+        <div class="form-group">
+          <label for="sport">Sport Type</label>
+          <select v-model="newSchedule.sport" id="sport" class="form-input" required>
+            <option value="">Select Sport</option>
+            <option value="Football">Football</option>
+            <option value="Basketball">Basketball</option>
+            <option value="Volleyball">Volleyball</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="season">Season</label>
+          <input 
+            v-model="newSchedule.season" 
+            id="season" 
+            class="form-input" 
+            placeholder="e.g., 2024-2025" 
+            required 
+          />
+        </div>
+
+        <button type="submit" class="submit-button" :disabled="loading">
+          {{ loading ? 'Creating...' : 'Create Schedule' }}
+        </button>
+      </form>
+    </div>
+
+    <div v-if="schedules.length > 0" class="schedules-section">
+      <h2 class="section-title">Existing Schedules</h2>
+      <div class="schedules-grid">
+        <div v-for="schedule in schedules" :key="schedule.id" class="schedule-card">
+          <h3>{{ schedule.sport }}</h3>
+          <p>Season: {{ schedule.season }}</p>
+          <p>Status: {{ schedule.published ? 'Published' : 'Draft' }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, reactive, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
-// replace with API later 
-const games = ref([
-  { date: 'August 30, 2025', team: 'Football', opponent: 'Nevada', time: '7:00 PM' },
-  { date: 'September 5, 2025', team: 'Basketball', opponent: 'Duke', time: '6:00 PM' },
-  { date: 'September 12, 2025', team: 'Volleyball', opponent: 'Baylor', time: '3:00 PM' }
-]);
+const router = useRouter();
+const API_BASE_URL = 'http://localhost:8080/frogcrew/api/v1/gameSchedule';
 
+const newSchedule = reactive({
+  sport: '',
+  season: ''
+});
+
+const schedules = ref([]);
 const loading = ref(false);
 const error = ref(null);
 
-// onMounted(() => {
-//   // No real loading for now since we use fake data
-// });
+const createGameSchedule = async () => {
+  if (!isAdmin.value) {
+    error.value = "You don't have permission to create game schedules";
+    return;
+  }
+
+  loading.value = true;
+  error.value = null;
+
+  try {
+    const payload = {
+      sport: newSchedule.sport,
+      season: newSchedule.season
+    };
+
+    const response = await fetch(API_BASE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+    console.log('Create schedule response:', result);
+
+    if (result.flag) {
+      // Reset form
+      newSchedule.sport = '';
+      newSchedule.season = '';
+      
+      // Refresh schedules list
+      await fetchSchedules();
+      // Navigate to view schedules
+      router.push('/view-game-schedule');
+    } else {
+      throw new Error(result.message || 'Failed to create game schedule');
+    }
+  } catch (err) {
+    error.value = `Error creating game schedule: ${err.message}`;
+    console.error('Error creating game schedule:', err);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const fetchSchedules = async () => {
+  try {
+    const response = await fetch(API_BASE_URL, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+
+    const result = await response.json();
+    console.log('Fetch schedules response:', result);
+
+    if (result.flag && Array.isArray(result.data)) {
+      schedules.value = result.data;
+    } else {
+      schedules.value = [];
+    }
+  } catch (err) {
+    console.error('Error fetching schedules:', err);
+    schedules.value = [];
+  }
+};
+
+const isAdmin = computed(() => {
+  return localStorage.getItem('userRole') === 'ADMIN';
+});
+
+onMounted(() => {
+  fetchSchedules();
+});
 </script>
 
 <style scoped>
-.game-list {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 600px;
-  margin: 120px auto 24px;
-  text-align: center;
-  box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+.container {
+  padding: 24px;
+  margin: 100px auto 24px;
+  max-width: 900px;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  margin: 10px 0;
-}
-
-.game-link {
-  text-decoration: none;
-  color: #007bff;
+.title {
+  font-size: 24px;
   font-weight: bold;
+  margin-bottom: 24px;
+  color: #1a1a1a;
 }
 
-.game-link:hover {
-  text-decoration: underline;
+.form-section {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 32px;
+}
+
+.form-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #2563eb;
+}
+
+.form-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.form-input {
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.submit-button {
+  background-color: #2563eb;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #1d4ed8;
+}
+
+.submit-button:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
 }
 
 .error-message {
-  color: red;
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
 }
-.loading-message {
-  color: #666;
+
+.schedules-section {
+  margin-top: 32px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #1a1a1a;
+}
+
+.schedules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.schedule-card {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-card h3 {
+  margin: 0 0 8px 0;
+  color: #2563eb;
+}
+
+.schedule-card p {
+  margin: 4px 0;
+  color: #4b5563;
 }
 </style>

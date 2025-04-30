@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../components/HomePage.vue';
 import CreateCrew from '../components/CreateCrew.vue';
 import CrewList from '../components/CrewList.vue';
-import GameSchedule from '@/components/GameSchedule.vue';
+import GameSchedule from '../components/GameSchedule.vue';
 import ViewGameSchedule from '../components/ViewGameSchedule.vue';
 import LogIn from '../components/LogIn.vue';
 

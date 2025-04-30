@@ -44,14 +44,13 @@
         <button type="submit" class="submit-button">Add Game</button>
       </form>
     </div>
-
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 
-const API_BASE_URL = 'http://localhost:8080/api/v1/frogcrew/gameSchedule';
+const API_BASE_URL = 'http://localhost:8080/frogcrew/api/v1/gameSchedule';
 
 const games = ref([]);
 const newGame = ref({
@@ -78,25 +77,43 @@ const fetchGames = async () => {
   loading.value = true;
   error.value = null;
   try {
+    console.log('Fetching games from:', `${API_BASE_URL}/games`);
     const response = await fetch(`${API_BASE_URL}/games`, {
       method: 'GET',
       headers: {
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       }
     });
+
+    console.log('Response status:', response.status);
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server response:', errorText);
+      throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+    }
+
+    const contentType = response.headers.get('content-type');
+    console.log('Response content type:', contentType);
+    
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Server did not return JSON');
+    }
+
     const result = await response.json();
-    if (response.ok) {
-      if (result.data) {
-        games.value = result.data;
-      } else {
-        games.value = [];
-      }
+    console.log('API Response:', result);
+
+    if (result.flag && Array.isArray(result.data)) {
+      games.value = result.data;
+      console.log('Games loaded:', games.value.length);
     } else {
-      throw new Error(result.message || "Failed to fetch games.");
+      games.value = [];
+      console.warn('Unexpected structure or empty data:', result);
     }
   } catch (err) {
-    error.value = err.message;
+    error.value = `Failed to fetch games: ${err.message}`;
     console.error('Error fetching games:', err);
+    games.value = [];
   } finally {
     loading.value = false;
   }
@@ -110,27 +127,34 @@ const addGame = async () => {
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/1/games`, {
+    console.log(`Adding game to schedule ${scheduleId}:`, newGame.value);
+    const response = await fetch(`${API_BASE_URL}/${scheduleId}/games`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(newGame.value)
     });
+
     const result = await response.json();
-    if (response.ok) {
+    console.log('Add game response:', result);
+
+    if (result.flag) {
       await fetchGames();
-      newGame.value.date = '';
-      newGame.value.time = '';
-      newGame.value.sportType = '';
-      newGame.value.venue = '';
-      newGame.value.opponent = '';
-      newGame.value.crewPositions = '';
+      // Reset form
+      newGame.value = {
+        date: '',
+        time: '',
+        sportType: '',
+        venue: '',
+        opponent: '',
+        crewPositions: ''
+      };
     } else {
       throw new Error(result.message || "Failed to add game.");
     }
   } catch (err) {
-    error.value = err.message;
+    error.value = `Failed to add game: ${err.message}`;
     console.error('Error adding game:', err);
   }
 };
