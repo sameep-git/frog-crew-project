@@ -27,6 +27,7 @@ public class CrewMemberController {
         this.crewMemberToCrewMemberSimpleDtoConverter = crewMemberToCrewMemberSimpleDtoConverter;
     }
 
+    // Use Case 3
     @GetMapping("/{crewId}")
     public Result findCrewMemberById(@PathVariable Long crewId) {
         CrewMember foundCrewMember = crewMemberService.findById(crewId);
@@ -34,6 +35,7 @@ public class CrewMemberController {
         return new Result(true, StatusCode.SUCCESS, "Find One Success", foundCrewMemberDto);
     }
 
+    // Use Case 16
     @GetMapping
     public Result findAllCrewMembers() {
         List<CrewMember> foundCrewMembers = crewMemberService.findAll();
@@ -49,6 +51,7 @@ public class CrewMemberController {
         return new Result(true, StatusCode.SUCCESS, "Find All Success", dtos);
     }
 
+    // Use Case 1 and 14 partially
     @PostMapping
     public Result addCrewMember(@RequestBody CrewMember crewMember) {
         CrewMember savedCrewMember = crewMemberService.save(crewMember);
@@ -56,6 +59,7 @@ public class CrewMemberController {
         return new Result(true, StatusCode.SUCCESS, "Add One Success", savedCrewMemberDto);
     }
 
+    // Use Case 15
     @DeleteMapping("/{crewId}")
     public Result deleteCrewMember(@PathVariable Integer crewId) {
         crewMemberService.delete(crewId);

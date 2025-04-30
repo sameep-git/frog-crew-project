@@ -26,6 +26,7 @@ public class GameController {
         this.gameToGeneralGameDtoConverter = gameToGeneralGameDtoConverter;
     }
 
+    // Use Case 5
     @GetMapping("/games")
     public Result getGeneralGameSchedule() {
         List<Game> foundGames = gameService.findAll();
@@ -40,6 +41,7 @@ public class GameController {
         return new Result(true, StatusCode.SUCCESS, "Find Success", gameDtos);
     }
 
+    // Use Case 20
     @GetMapping("/game/{gameId}")
     public Result getGameById(@PathVariable Integer gameId) {
         Game foundGame =this.gameService.findById(gameId);
@@ -47,6 +49,7 @@ public class GameController {
         return new Result(true, StatusCode.SUCCESS, "Find Success", dto);
     }
 
+    // Use Case 20
     @PostMapping("/{scheduleId}/games")
     public Result addGameToSchedule(@PathVariable Integer scheduleId,
                                     @RequestBody @Valid GameDto gameDto) {
