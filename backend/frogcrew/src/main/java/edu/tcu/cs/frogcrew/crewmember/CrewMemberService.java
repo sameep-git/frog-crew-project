@@ -20,8 +20,8 @@ public class CrewMemberService {
         this.idWorker = idWorker;
     }
 
-    public CrewMember findById(String crewId) {
-        return crewMemberRepository.findById(crewId)
+    public CrewMember findById(Integer crewId) {
+        return crewMemberRepository.findById(String.valueOf(crewId))
                 .orElseThrow(() -> new CrewMemberNotFoundException(crewId));
     }
 
@@ -30,13 +30,13 @@ public class CrewMemberService {
     }
 
     public CrewMember save(CrewMember crewMember) {
-        crewMember.setId(idWorker.nextId() + "");
+        crewMember.setId(Integer.valueOf(idWorker.nextId() + ""));
         return this.crewMemberRepository.save(crewMember);
     }
 
-    public void delete(String crewId) {
-        crewMemberRepository.findById(crewId).orElseThrow(
+    public void delete(Integer crewId) {
+        crewMemberRepository.findById(String.valueOf(crewId)).orElseThrow(
                 () -> new CrewMemberNotFoundException(crewId));
-        crewMemberRepository.deleteById(crewId);
+        crewMemberRepository.deleteById(String.valueOf(crewId));
     }
 }

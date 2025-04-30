@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/v1/frogcrew/gameSchedule")
+@RequestMapping("/frogcrew/api/v1/gameSchedule")
 public class GameScheduleController {
 
     private final GameScheduleService gameScheduleService;

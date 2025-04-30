@@ -59,7 +59,7 @@ class GameScheduleControllerTest {
         String json = this.objectMapper.writeValueAsString(dto);
 
         // When and then
-        this.mockMvc.perform(post("/api/v1/frogcrew/gameSchedule")
+        this.mockMvc.perform(post("/frogcrew/api/v1/gameSchedule")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -79,7 +79,7 @@ class GameScheduleControllerTest {
         }
         """;
 
-        this.mockMvc.perform(post("/api/v1/frogcrew/gameSchedule")
+        this.mockMvc.perform(post("/frogcrew/api/v1/gameSchedule")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -97,7 +97,7 @@ class GameScheduleControllerTest {
         }
         """;
 
-        this.mockMvc.perform(post("/api/v1/frogcrew/gameSchedule")
+        this.mockMvc.perform(post("/frogcrew/api/v1/gameSchedule")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))

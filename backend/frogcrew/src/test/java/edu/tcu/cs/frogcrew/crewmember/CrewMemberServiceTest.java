@@ -39,7 +39,7 @@ public class CrewMemberServiceTest {
         crewMembers = new ArrayList<>();
 
         CrewMember c1 = new CrewMember();
-        c1.setId("1250808601744904191");
+        c1.setId(1);
         c1.setFirstName("John");
         c1.setLastName("Doe");
         c1.setEmail("john.doe@example.com");
@@ -48,7 +48,7 @@ public class CrewMemberServiceTest {
         c1.setQualifiedPosition(List.of("Producer"));
 
         CrewMember c2 = new CrewMember();
-        c2.setId("1250808601744904192");
+        c2.setId(2);
         c2.setFirstName("Sameep");
         c2.setLastName("Shah");
         c2.setEmail("sameep.shah@tcu.edu");
@@ -70,7 +70,7 @@ public class CrewMemberServiceTest {
 
         // Given
         CrewMember c = new CrewMember();
-        c.setId("1250808601744904191");
+        c.setId(1);
         c.setFirstName("John");
         c.setLastName("Doe");
         c.setEmail("john.doe@example.com");
@@ -78,10 +78,10 @@ public class CrewMemberServiceTest {
         c.setRole("Student");
         c.setQualifiedPosition(Arrays.asList("Producer", "Director"));
 
-        given(crewMemberRepository.findById("1250808601744904191")).willReturn(Optional.of(c));
+        given(crewMemberRepository.findById(String.valueOf(1))).willReturn(Optional.of(c));
 
         // When
-        CrewMember returnedCrewMember = crewMemberService.findById("1250808601744904191");
+        CrewMember returnedCrewMember = crewMemberService.findById(1);
 
         // Then
         assertThat(returnedCrewMember.getId()).isEqualTo(c.getId());
@@ -89,24 +89,24 @@ public class CrewMemberServiceTest {
         assertThat(returnedCrewMember.getLastName()).isEqualTo(c.getLastName());
         assertThat(returnedCrewMember.getEmail()).isEqualTo(c.getEmail());
         assertThat(returnedCrewMember.getRole()).isEqualTo(c.getRole());
-        verify(crewMemberRepository, times(1)).findById("1250808601744904191");
+        verify(crewMemberRepository, times(1)).findById("1");
     }
 
     @Test
     void testFindCrewMemberByIdNotFound() {
         // Given
-        given(crewMemberRepository.findById("1250808601744904192")).willReturn(Optional.empty());
+        given(crewMemberRepository.findById("2")).willReturn(Optional.empty());
 
         // When
         Throwable thrown = catchThrowable(() -> {
-            CrewMember crewMember = crewMemberService.findById("1250808601744904192");
+            CrewMember crewMember = crewMemberService.findById(2);
         });
 
         // Then
         assertThat(thrown)
                 .isInstanceOf(CrewMemberNotFoundException.class)
-                .hasMessage("Could not find crew member with Id 1250808601744904192 :(");
-        verify(crewMemberRepository, times(1)).findById("1250808601744904192");
+                .hasMessage("Could not find crew member with Id 2 :(");
+        verify(crewMemberRepository, times(1)).findById("2");
     }
 
     @Test
@@ -140,7 +140,7 @@ public class CrewMemberServiceTest {
         CrewMember savedCrewMember = crewMemberService.save(c);
 
         // Then
-        assertThat(savedCrewMember.getId()).isEqualTo("12345678");
+        assertThat(savedCrewMember.getId()).isEqualTo(12345678);
         assertThat(savedCrewMember.getFirstName()).isEqualTo(c.getFirstName());
         assertThat(savedCrewMember.getLastName()).isEqualTo(c.getLastName());
         assertThat(savedCrewMember.getEmail()).isEqualTo(c.getEmail());
@@ -158,11 +158,11 @@ public class CrewMemberServiceTest {
         c.setRole("Student");
         c.setQualifiedPosition(Arrays.asList("Producer", "Director"));
 
-        given(crewMemberRepository.findById("12345678")).willReturn(Optional.of(c));
-        doNothing().when(crewMemberRepository).deleteById("12345678");
+        given(crewMemberRepository.findById(String.valueOf(12345678))).willReturn(Optional.of(c));
+        doNothing().when(crewMemberRepository).deleteById(String.valueOf(12345678));
 
         // When
-        crewMemberService.delete("12345678");
+        crewMemberService.delete(12345678);
 
         // Then
         verify(crewMemberRepository, times(1)).deleteById("12345678");
@@ -175,7 +175,7 @@ public class CrewMemberServiceTest {
 
         // When
         assertThrows(CrewMemberNotFoundException.class, () -> {
-            crewMemberService.delete("12345678");
+            crewMemberService.delete(12345678);
         });
 
         // Then
