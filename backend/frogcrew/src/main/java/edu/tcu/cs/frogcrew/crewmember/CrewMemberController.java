@@ -28,7 +28,7 @@ public class CrewMemberController {
     }
 
     @GetMapping("/{crewId}")
-    public Result findCrewMemberById(@PathVariable String crewId) {
+    public Result findCrewMemberById(@PathVariable Integer crewId) {
         CrewMember foundCrewMember = crewMemberService.findById(crewId);
         CrewMemberDto foundCrewMemberDto = crewMemberToCrewMemberDtoConverter.convert(foundCrewMember);
         return new Result(true, StatusCode.SUCCESS, "Find One Success", foundCrewMemberDto);
@@ -57,7 +57,7 @@ public class CrewMemberController {
     }
 
     @DeleteMapping("/{crewId}")
-    public Result deleteCrewMember(@PathVariable String crewId) {
+    public Result deleteCrewMember(@PathVariable Integer crewId) {
         crewMemberService.delete(crewId);
         return new Result(true, StatusCode.SUCCESS, "Delete Success");
     }

@@ -79,7 +79,7 @@ class GameControllerTest {
         given(this.gameService.findAll()).willReturn(this.games);
 
         // When and Then
-        this.mockMvc.perform(get("/api/v1/frogcrew/gameSchedule/games").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(get("/frogcrew/api/v1/gameSchedule/games").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Find Success"))
@@ -108,7 +108,7 @@ class GameControllerTest {
         given(gameService.findById(1)).willReturn(this.games.get(0));
 
         // when and then
-        mockMvc.perform(get("/api/v1/frogcrew/gameSchedule/game/1")
+        mockMvc.perform(get("/frogcrew/api/v1/gameSchedule/game/1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
@@ -128,7 +128,7 @@ class GameControllerTest {
                 .willThrow(new ObjectNotFoundException("game", 42));
 
         // When and then
-        mockMvc.perform(get("/api/v1/frogcrew/gameSchedule/game/42")
+        mockMvc.perform(get("/frogcrew/api/v1/gameSchedule/game/42")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
@@ -160,7 +160,7 @@ class GameControllerTest {
                 .willReturn(game);
 
         // When and then
-        this.mockMvc.perform(post("/api/v1/frogcrew/gameSchedule/1/games")
+        this.mockMvc.perform(post("/frogcrew/api/v1/gameSchedule/1/games")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -193,7 +193,7 @@ class GameControllerTest {
         given(this.gameService.addGameToSchedule(Mockito.eq(99), Mockito.any()))
                 .willThrow(new ObjectNotFoundException("GameSchedule", 99));
 
-        this.mockMvc.perform(post("/api/v1/frogcrew/gameSchedule/99/games")
+        this.mockMvc.perform(post("/frogcrew/api/v1/gameSchedule/99/games")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON))
@@ -209,7 +209,7 @@ class GameControllerTest {
         // Given nothing
 
         // When and then
-        this.mockMvc.perform(post("/api/v1/frogcrew/gameSchedule/1/games")
+        this.mockMvc.perform(post("/frogcrew/api/v1/gameSchedule/1/games")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}")
                         .accept(MediaType.APPLICATION_JSON))
