@@ -39,11 +39,11 @@ public class CrewMember implements Serializable {
     @ElementCollection
     private List<String> qualifiedPosition;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

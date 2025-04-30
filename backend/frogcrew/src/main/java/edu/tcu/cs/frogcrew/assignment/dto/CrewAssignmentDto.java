@@ -7,8 +7,7 @@ import java.time.LocalTime;
 
 public record CrewAssignmentDto(
         Integer crewedUserId,
-        @NotNull(message = "UserId is required")
-        Long userId,
+        Integer userId,
         @NotNull(message = "GameId is required")
         Integer gameId,
         @NotBlank(message = "Position is required")

@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 
 public record CrewMemberDto (
-        Long userId,
+        Integer userId,
 
         @NotEmpty(message = "First Name is required.")
      String firstName,

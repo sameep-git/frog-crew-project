@@ -49,7 +49,7 @@ public class AvailabilityControllerTest {
         game.setGameId(1);
 
         CrewMember crewMember = new CrewMember();
-        crewMember.setId(1L);
+        crewMember.setId(1);
 
         Availability availability = new Availability();
         availability.setGame(game);
@@ -57,7 +57,7 @@ public class AvailabilityControllerTest {
         availability.setAvailability(true);
         availability.setComment("I will be a little late!");
 
-        AvailabilityDTO availabilityDTO = new AvailabilityDTO(1L, 1, Boolean.TRUE, "I will be a little late!");
+        AvailabilityDTO availabilityDTO = new AvailabilityDTO(1, 1, Boolean.TRUE, "I will be a little late!");
         String json = objectMapper.writeValueAsString(availabilityDTO);
 
         given(availabilityService.addAvailability(Mockito.any(Availability.class))).willReturn(availability);

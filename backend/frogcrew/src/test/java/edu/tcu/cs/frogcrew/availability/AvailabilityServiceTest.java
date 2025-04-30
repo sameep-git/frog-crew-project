@@ -43,7 +43,7 @@ public class AvailabilityServiceTest {
         game.setGameId(1);
 
         CrewMember crewMember = new CrewMember();
-        crewMember.setId(1L);
+        crewMember.setId(1);
 
         Availability availability = new Availability();
         availability.setGame(game);

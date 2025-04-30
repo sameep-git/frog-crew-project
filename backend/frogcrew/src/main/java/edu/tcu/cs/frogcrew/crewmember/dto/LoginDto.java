@@ -1,7 +1,7 @@
 package edu.tcu.cs.frogcrew.crewmember.dto;
 
 public record LoginDto (
-        Long userId,
+        Integer userId,
         String role,
         String token
 ){
