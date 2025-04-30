@@ -3,8 +3,8 @@ package edu.tcu.cs.frogcrew.availability.dto;
 import jakarta.validation.constraints.NotNull;
 
 public record AvailabilityDTO(
-        @NotNull(message = "User id is required")
-        Integer userId,
+        @NotNull(message = "Crew Member id is required")
+        Integer crewMemberId,
 
         @NotNull(message = "Game id is required")
         Integer gameId,

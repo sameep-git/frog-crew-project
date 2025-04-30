@@ -34,7 +34,7 @@ public class AvailabilityController {
 
     @PostMapping
     public Result addAvailability(@Valid @RequestBody AvailabilityDTO availabilityDTO) {
-        CrewMember availableCrewMember = this.crewMemberService.findById(availabilityDTO.userId());
+        CrewMember availableCrewMember = this.crewMemberService.findById(availabilityDTO.crewMemberId());
         Game availableGame = this.gameService.findById(availabilityDTO.gameId());
         Availability availability = availabilityDTOToAvailabilityConverter.convert(availabilityDTO);
 
