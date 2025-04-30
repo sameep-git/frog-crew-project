@@ -29,7 +29,7 @@ public class DBDataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         CrewMember c1 = new CrewMember();
-        c1.setId(1L);
+        // c1.setId(1);
         c1.setFirstName("John");
         c1.setLastName("Doe");
         c1.setPhoneNumber("123-456-7890");
@@ -39,7 +39,7 @@ public class DBDataInitializer implements CommandLineRunner {
         c1.setQualifiedPosition(Arrays.asList("Producer", "Director"));
 
         CrewMember c2 = new CrewMember();
-        c2.setId(2L);
+        // c2.setId(2);
         c2.setFirstName("Sameep");
         c2.setLastName("Shah");
         c2.setPhoneNumber("123-456-1234");
@@ -49,7 +49,7 @@ public class DBDataInitializer implements CommandLineRunner {
         c2.setQualifiedPosition(Arrays.asList("Producer", "Director"));
 
         CrewMember c3 = new CrewMember();
-        c3.setId(3L);
+        // c3.setId(3);
         c3.setFirstName("An");
         c3.setLastName("Cao");
         c3.setPhoneNumber("123-456-5678");
@@ -59,7 +59,7 @@ public class DBDataInitializer implements CommandLineRunner {
         c3.setQualifiedPosition(Arrays.asList("Producer", "Director","Audio A1"));
 
         CrewMember c4 = new CrewMember();
-        c4.setId(4L);
+        // c4.setId(4);
         c4.setFirstName("Arscene");
         c4.setLastName("Rubayita");
         c4.setPhoneNumber("987-456-1234");
