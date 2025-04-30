@@ -12,6 +12,7 @@ import java.util.List;
 public class CrewMember implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NotEmpty(message = "First Name is required.")
