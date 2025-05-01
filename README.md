@@ -1,22 +1,21 @@
 # frogcrew
 
-- [ ] Use Case 1: Crew Member Creates Crew Member Profile 
-	- Front End - Survey Form (details are in the use cases document)
-	- Back End - Making a CrewMember class and (CREATE)
-- [ ] Use Case 3: Crew Member Views A Crew Member’s Profile
-	- Front End - Shows a profile with details on it
+FrogCrew is built using Vue.js (An) for the front-end and Spring Boot (Sameep) for backend. This project is built to help TCU Athletics schedule crew members for TCU home sports games.
 
+Current features include:
 
-### TODO
-Sameep:
+-  Use Case: Crew Member Creates Crew Member Profile  
+-  Use Case: Crew Member Views A Crew Member’s Profile  
+-  Use Case: Crew Member Views General Game Schedule  
+-  Use Case: Crew Member Views Crew List  
+-  Use Case: Crew Member Submits Availability  
+-  Use Case: Admin Invites Crew Member  
+-  Use Case: Admin Deletes A Crew Member  
+-  Use Case: Admin views crew members  
+-  Use Case: Admin Creates Game Schedule  
+-  Use Case: Admin Adds Games To Game Schedule  
+-  Use Case: Admin Schedules Crew
 
- - [ ] Start working on CrewMember CRD operations
- - [ ] Think about how invites might work
- - [ ] Work on API documentation
+API documentation: https://app.swaggerhub.com/apis-docs/JAMESEDMONSON/frog-crew/1.0.0
 
-An:
-
-- [ ] Crew Member Creates Crew Member Profile  
-- [ ] Crew Member Views A Crew Member’s Profile
-- [ ] Crew Member Views Crew List
-- [ ] Admin views crew members
+The backend is deployed on Microsoft Azure using an App Service, while the frontend is deployed on Vercel.
